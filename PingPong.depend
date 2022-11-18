@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1668739247 source:c:\users\kevin\onedrive\escritorio\final_programacion_2\pingpong\main.cpp
+	<ctime>
+	<cstdlib>
+	<iostream>
+	<allegro.h>
+
