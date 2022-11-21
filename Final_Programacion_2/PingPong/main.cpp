@@ -17,14 +17,13 @@ typedef struct
 void incremento( );
 void cerrar_ventana( );
 void PrimeraVentana( );
-template <class type1>//type1 = int
+template <class type1>///type1 = int
 class Jugador
 {
     type1 puntaje1;
     type1 puntaje2;
     type1 escudo1;
     type1 escudo2;
-
 public:
     Jugador()
     {
@@ -32,7 +31,6 @@ public:
         puntaje2  = 0 ;
         escudo1   = 0 ;
         escudo2   = 0 ;
-
     }
     ~Jugador ()
     {
@@ -54,10 +52,7 @@ public:
     {
         this->escudo2 = escudo2;
     }
-    void setEscore(type1 escore)
-    {
-        this->escore=escore ;
-    }
+
     type1 getEscudo1 ()
     {
         return escudo1;
@@ -92,14 +87,13 @@ class Funcionalidad
 public:
     Funcionalidad ()
     {
-
         resultado = 0;
         nuevo = false;
         nivel = 1;
         escore = 0 ;
         ganar1 = 0 ;
         ganar2 = 0 ;
-        contadorP = 5;
+        contadorP = 1;
         ventana = false;
         Portada = false;
         tiempo++;
@@ -202,7 +196,6 @@ public:
     {
         return nuevo;
     }
-
     type2 getPortada ()
     {
         return Portada;
@@ -224,7 +217,6 @@ public:
         alto = 10;
         ancho = 2;
     }
-
     ~Paleta ()
     {
 
@@ -393,18 +385,18 @@ public:
     void resetPelotacentro( Pelota<int,float> &pelota, Funcionalidad<int,bool> &funciones )
     {
         int direccionX,direccionY;
-        //SETTERS DE PELOTA
+        ///SETTERS DE PELOTA
         pelota.setX( ANCHO / 2 );
         pelota.setY( ALTO / 2 );
 
         srand( time( NULL ) );
-        direccionX = ( rand() % 2) + 1; //DIRECCION X RAND 0/1
-        direccionY = ( rand() % 2) + 1; //DIRECCION Y RAND 0/1
-        direccionX = ( direccionX == 1 ) ? - 1 : 1;//1 = -1 , 2 = 1
-        direccionY = ( direccionY == 1 ) ? - 1 : 1;//1 = -1 , 2 = 1
-        pelota.setDirX( direccionX );//SETTER
-        pelota.setDirY( direccionY );//SETTER
-        funciones.setResultado( 1 );//MARCA DE INICIO
+        direccionX = ( rand() % 2) + 1; ///DIRECCION X RAND 0/1
+        direccionY = ( rand() % 2) + 1; ///DIRECCION Y RAND 0/1
+        direccionX = ( direccionX == 1 ) ? - 1 : 1;///1 = -1 , 2 = 1
+        direccionY = ( direccionY == 1 ) ? - 1 : 1;///1 = -1 , 2 = 1
+        pelota.setDirX( direccionX );///SETTER
+        pelota.setDirY( direccionY );///SETTER
+        funciones.setResultado( 1 );///MARCA DE INICIO
     }
     void resetPelota( Pelota<int,float> &pelota, Paleta<int> paleta, int a, Jugador<int> &jugadores, Funcionalidad<int,bool> &funciones, BITMAP *buffer, BITMAP *jugador1, BITMAP *jugador2, SAMPLE *level_up, SAMPLE *winner)
     {
@@ -471,14 +463,14 @@ public:
             jugadores.setPuntaje2(0);
             pelota.direccion_Pelota(pelota,funciones);
         }
-        if( funciones.getGanar1() >= 3   && funciones.getNivel()==5 )//Gana El Jugador 1
+        if( funciones.getGanar1() >= 2   || funciones.getNivel()==5 )//Gana El Jugador 1
         {
             play_sample( winner, 200, 150, 1000, 0 );
             funciones.setContadorP(funciones.getContadorP() +1 );
             while( ! key[KEY_ENTER] )
             {
                 ///Setea los valores para la nueva partida
-                blit( jugador1, screen, 0, 0, 0, 0, ANCHO, ALTO );
+                blit( jugador1, screen, 0, 0, 0, 0, ANCHO, ALTO );///Portada Gano el jugado 1
                 jugadores.setPuntaje1( 0 );
                 jugadores.setPuntaje2( 0 );
                 jugadores.setEscudo1( 5 );
@@ -497,7 +489,7 @@ public:
                 allegro_exit();
             }
         }
-        else if( funciones.getGanar2() >= 3   && funciones.getNivel()==5 )
+        else if( funciones.getGanar2() >= 2   || funciones.getNivel()==5 )
         {
             ///Gana el Jugador 2
             play_sample( winner, 200, 150, 1000, 0 );
@@ -505,7 +497,7 @@ public:
             while(!key[KEY_ENTER])
             {
                 /// Seteo los Valores para el nuevo juego
-                blit( jugador2, screen, 0, 0, 0, 0, ANCHO, ALTO );
+                blit( jugador2, screen, 0, 0, 0, 0, ANCHO, ALTO );///Portada Gano el jugado 2
                 jugadores.setPuntaje1( 0 );
                 jugadores.setPuntaje2( 0 );
                 jugadores.setEscudo1( 5 );
@@ -531,6 +523,7 @@ public:
         }
         if(funciones.getContadorP()== 6 )
         {
+            ///SETEAMOS EL CONTADOR DE PELOTA SEN 1
             funciones.setContadorP(1)  ;
         }
         ///SETTER DE VELOCIDAD LUEGO DEL RESTART, CONTADOR DE TURNOS, MARCA DE RESULTADO/INICIALIZACION
@@ -538,7 +531,7 @@ public:
         pelota.setVelY( pelota.getVel() );
         funciones.setResultado( 1 );
     }
-    void moverPelota( Pelota<int,float> &pelota, Paleta<int> &paleta1, Paleta<int> &paleta2, Jugador<int> &jugadores,Funcionalidad<int,bool> &funciones, BITMAP *buffer, BITMAP *jugador1, BITMAP *jugador2,BITMAP *escudo1,BITMAP *escudo2,SAMPLE *hit,SAMPLE *punto,SAMPLE *level_up, SAMPLE *winner, SAMPLE *wall,SAMPLE *escudo)
+    void moverPelota( Pelota<int,float> &pelota, Paleta<int> &paleta1, Paleta<int> &paleta2, Jugador<int> &jugadores,Funcionalidad<int,bool> &funciones, BITMAP *buffer, BITMAP *jugador1, BITMAP *jugador2,SAMPLE *hit,SAMPLE *punto,SAMPLE *level_up, SAMPLE *winner, SAMPLE *wall,SAMPLE *escudo)
     {
         if(funciones.getNivel() == 1)
         {
@@ -567,13 +560,13 @@ public:
         int py = pelota.getY( );
         int y1 = paleta1.getY( );
         int y2 = paleta2.getY( );
-        if ( px <= paleta1.getAncho() + pelota.getAncho() / 2 )  //GOLPE BORDE INTERIOR DE PALETA1
+        if ( px <= paleta1.getAncho() + pelota.getAncho() / 2 )  ///GOLPE BORDE INTERIOR DE PALETA1
         {
             if ( ( py + pelota.getAncho() / 2 ) >= y1 && ( py - pelota.getAncho() / 2 ) <= y1 + paleta1.getAlto())
-                //GOLPE LIMITES LARGO DE PALETA
+                ///GOLPE LIMITES LARGO DE PALETA
             {
                 if( py + pelota.getAncho() / 2 >= y1 && py <= y1 + paleta1.getAlto() - 63 )
-                    //GOLPE ESQUINA SUPERIOR DE PALETA1. EJE Y>X
+                    ///GOLPE ESQUINA SUPERIOR DE PALETA1. EJE Y>X
                 {
                     if( diry == 1 )
                     {
@@ -584,7 +577,7 @@ public:
                     pelota.setVelY( pelota.getVel() + 1 );
                 }
                 else if( py >= y1 + 62 && ( py - pelota.getAncho() / 2 )  <= y1 + paleta1.getAlto() )
-                    //GOLPE ESQUINA INFERIOR DE PALETA1. EJE Y>X
+                    ///GOLPE ESQUINA INFERIOR DE PALETA1. EJE Y>X
                 {
                     if( diry == -1 )
                     {
@@ -595,7 +588,7 @@ public:
                     pelota.setVelY( pelota.getVel() + 1 );
                 }
                 else if( py >= y1 + 31 && py <= y1 + paleta1.getAlto() - 32 )
-                    //GOLPE EN EL MEDIO DE LA PALETA. Y=X
+                    ///GOLPE EN EL MEDIO DE LA PALETA. Y=X
                 {
                     play_sample( hit, 200, 150, 1000, 0 );
                     pelota.setVelX( pelota.getVel() );
@@ -604,10 +597,10 @@ public:
                 dirx *= -1;
             }
             else
-                //PALETA1 PIERDE
+                ///PALETA1 PIERDE
             {
                 if( ( py > y1 + paleta1.getAlto() ) && ( px > paleta1.getAncho() + pelota.getAncho() / 2 ) && ( diry == -1 ) && ( px > 0 ) )
-                    //PALETA1 REBOTE
+                    ///PALETA1 REBOTE
                 {
                     play_sample( hit, 200, 150, 1000, 0 );
                     diry = -1;
@@ -625,19 +618,14 @@ public:
                         diry = -1;
                     }
                     dirx =  1 ;
-                    //bits.mapa_de_bits[12]
                     play_sample(escudo, 200, 150, 1000, 0);
-                    jugadores.setEscudo1( jugadores.getEscudo1() - 1 );
-
-                    //masked_blit( escudo1, buffer, 0, 0, px -1  , py  , 10, 70);
+                    jugadores.setEscudo1( jugadores.getEscudo1() - 1 );//masked_blit( escudo1, buffer, 0, 0, px -1  , py  , 10, 70);
                 }
                 if( px <= 0 )
                 {
                     funciones.setMensaje( 1 );
                     play_sample( punto, 200, 150, 1000, 0 );
                     jugadores.setEscudo2(jugadores.getEscudo2() +  1 );
-                    //funciones.setContador1(funciones.getContador1() + 1);
-
                     resetPelota(pelota, paleta1, 1, jugadores, funciones, buffer, jugador1, jugador2, level_up, winner);
                     return;
                 }
@@ -646,7 +634,7 @@ public:
         else if ( px >= ANCHO - paleta2.getAncho() - pelota.getAncho() / 2 )//GOLPE BORDE INTERIOR DE PALETA2
         {
             if (( py + pelota.getAncho() / 2 ) >= y2 && ( py - pelota.getAncho() / 2 )<= y2 + paleta2.getAlto())
-                //GOLPE LIMITES LARGO DE PALETA
+                ///GOLPE LIMITES LARGO DE PALETA
             {
                 if( ( py + pelota.getAncho() / 2 ) >= y2 && py <= y2 + paleta2.getAlto() - 63 )
                     ///GOLPE ESQUINA SUPERIOR. VELOCIDAD DE EJE Y>X
@@ -659,7 +647,8 @@ public:
                     pelota.setVelX( pelota.getVel() - 1 );
                     pelota.setVelY( pelota.getVel() + 1 );
                 }
-                else if( py >= y2 + 62 && ( py - pelota.getAncho() / 2 ) <= y2 + paleta2.getAlto())//GOLPE ESQUINA INFERIOR. VELOCIDAD DE EJE Y>X
+                else if( py >= y2 + 62 && ( py - pelota.getAncho() / 2 ) <= y2 + paleta2.getAlto())
+                    ///GOLPE ESQUINA INFERIOR. VELOCIDAD DE EJE Y>X
                 {
                     if( diry == -1 )
                     {
@@ -669,7 +658,7 @@ public:
                     pelota.setVelX( pelota.getVel() - 1 );
                     pelota.setVelY( pelota.getVel() + 1 );
                 }
-                else if( py >= y2 + 31 && py <= y2 + paleta1.getAlto() - 32 )//GOLPE MEDIO DE LA PALETA
+                else if( py >= y2 + 31 && py <= y2 + paleta1.getAlto() - 32 )///GOLPE MEDIO DE LA PALETA
                 {
                     play_sample( hit, 200, 150, 1000, 0 );
                     pelota.setVelX( pelota.getVel() );
@@ -677,10 +666,10 @@ public:
                 }
                 dirx *= -1;
             }
-            else/*PIERDE PALETA2*/
+            else///PIERDE PALETA2
             {
                 if(( ( py - pelota.getAncho() / 2 ) > y2 + paleta2.getAlto() ) && ( px > ANCHO - paleta2.getAncho() - pelota.getAncho() / 2 ) && ( diry == -1 ) && ( px < ANCHO ) )
-                    /*PALETA2 REBOTE */
+                    ///PALETA2 REBOTE
                 {
                     play_sample( hit, 200, 150, 1000, 0 );
                     diry = 1;
@@ -691,7 +680,6 @@ public:
                     play_sample( hit, 200, 150, 1000, 0 );
                     diry = -1;
                 }
-
                 if( px < ANCHO && jugadores.getEscudo2() > 0)
                 {
                     if (diry ==  1)
@@ -705,12 +693,11 @@ public:
                     dirx = -1  ;
                     play_sample(escudo, 200, 150, 1000, 0);
                     jugadores.setEscudo2( jugadores.getEscudo2() - 1 );
-                    //masked_blit( escudo2, buffer, 0, 0, px +2 , py, 15, 94 );
                 }
 
                 if( px >= ANCHO )
                 {
-                    //PUNTO
+                    ///PUNTO
                     funciones.setMensaje( 1 );
                     play_sample( punto, 200, 150, 1000, 0 );
                     jugadores.setEscudo1(jugadores.getEscudo1() +  1 );
@@ -724,8 +711,7 @@ public:
             play_sample( wall, 200, 150, 1000, 0 );
             diry *= -1;
         }
-
-        //MOVIMIENTOS CONSTANTES DE PELOTA
+        ///MOVIMIENTOS CONSTANTES DE PELOTA
         pelota.setX( pelota.getX() + pelota.getVelX() * dirx );
         pelota.setDirX( dirx );
         pelota.setDirY( diry );
@@ -739,11 +725,10 @@ class Dibujar
 {
 public:
     void dibujar_mesa( BITMAP* buffer,Funcionalidad<int,bool> &funciones )
-    //lineas central y la H de la mesa
+    ///DIBUJA LA LINEA DEL MEDIO
     {
         int i = 0;
         int j = 20;
-
         while( j <= ALTO )
         {
             rectfill( buffer, ANCHO/2, i, ANCHO/2, j, 0xFFFFFF );
@@ -788,7 +773,6 @@ public:
         {
             textprintf_ex( Buffer, font, 880, 60, 0x00F0FBFF, - 1, "Escudo 2: 0" );
         }
-
         ///Cambio de Nivel
         switch(funciones.getNivel())
         {
@@ -810,7 +794,7 @@ public:
         }
     }
     /// Dibujo de las diferentes pelotas
-    void dibujar_pelota(BITMAP *Buffer, Pelota<int,float> & pelota) //DIBUJAR PELOTA
+    void Dibujar_pelota(BITMAP *Buffer, Pelota<int,float> & pelota) //DIBUJAR PELOTA
     {
         circlefill ( Buffer, pelota.getX(), pelota.getY(), pelota.getAncho() / 2, 0xFFFFFF );
         circlefill ( Buffer, pelota.getX(), pelota.getY(), pelota.getAncho() / 6, 0x000000 );    /// me da el color negro
@@ -819,33 +803,31 @@ public:
     {
         if (signo == "negativo" )
         {
-            circlefill ( Buffer, pelota.getX(),pelota.getY()/* - numero*/, pelota.getAncho() / 2, 0xFFFFFF );
-            circlefill ( Buffer, pelota.getX(), pelota.getY() /*- numero*/, pelota.getAncho() / 6, 0x000000 );
+            circlefill ( Buffer, pelota.getX(),pelota.getY() - numero, pelota.getAncho() / 2, 0xFFFFFF );
+            circlefill ( Buffer, pelota.getX(), pelota.getY() - numero, pelota.getAncho() / 6, 0x000000 );
         }
         else if (signo == "positivo")
         {
-            circlefill ( Buffer, pelota.getX(), pelota.getY() /*+ numero*/, pelota.getAncho()/ 2, 0xFFFFFF );
-            circlefill ( Buffer, pelota.getX(), pelota.getY() /*+ numero*/, pelota.getAncho() / 6, 0x000000 );
+            circlefill ( Buffer, pelota.getX(), pelota.getY() + numero, pelota.getAncho()/ 2, 0xFFFFFF );
+            circlefill ( Buffer, pelota.getX(), pelota.getY() + numero, pelota.getAncho() / 6, 0x000000 );
         }
     }
 };
-
-///INVOCACION DE CLASES
-    Paleta<int> paletaV1;
-    Paleta<int> paletaV2;
-    Pelota<int,float> pelota1;
-    Pelota<int,float> pelota2 ;
-    Pelota<int,float> pelota3 ;
-    Pelota<int,float> pelota4 ;
-    Pelota<int,float> pelota5 ;
-    Jugador<int> jugadores;
-    Funcionalidad<int,bool> funcion;
-    bitmaps *bits;
-    samples *audio;
-
+///INVOCACION DE LA FUNCIONALIDAD
+Funcionalidad<int,bool> funcion;
 class juego: public Dibujar, public Pelota <int,float>,public Funcionalidad<int,bool>, public Jugador<int>, public Paleta<int>
 {
-
+///INVOCACION DE CLASES
+Paleta<int> paletaV1;
+Paleta<int> paletaV2;
+Pelota<int,float> pelota1;
+Pelota<int,float> pelota2 ;
+Pelota<int,float> pelota3 ;
+Pelota<int,float> pelota4 ;
+Pelota<int,float> pelota5 ;
+Jugador<int> jugadores;
+bitmaps *bits;
+samples *audio;
 public :
     void IniciarYJugar( )
     {
@@ -919,22 +901,26 @@ public :
         pelota1.setVel(5);
         pelota1.setAlto( 15 );
         pelota1.setAncho( 15 );
+        pelota1.setX(ANCHO / 2 );
+        pelota1.setY(ALTO / 2 );
         resetPelotacentro(pelota1,funcion );
 
         pelota2.setVelX( 5);
         pelota2.setVelY( 4);
-
         pelota2.setVel( 5 );
         pelota2.setAlto( 15 );
         pelota2.setAncho( 15 );
+        pelota2.setX(ANCHO / 2 );
+        pelota2.setY(ALTO / 2 );
         resetPelotacentro(pelota2,funcion );
-
 
         pelota3.setVelX( 5 );
         pelota3.setVelY( 3);
         pelota3.setVel( 5 );
         pelota3.setAlto( 15 );
         pelota3.setAncho( 15 );
+        pelota3.setX(ANCHO / 2 );
+        pelota3.setY(ALTO / 2 );
         resetPelotacentro(pelota3,funcion );
 
         pelota4.setVelX( 5 );
@@ -942,6 +928,8 @@ public :
         pelota4.setVel( 5 );
         pelota4.setAlto( 15 );
         pelota4.setAncho( 15 );
+        pelota4.setX(ANCHO / 2 );
+        pelota4.setY(ALTO / 2 );
         resetPelotacentro(pelota4,funcion );
 
         pelota5.setVelX( 5 );
@@ -949,22 +937,22 @@ public :
         pelota5.setVel( 5 );
         pelota5.setAlto( 15 );
         pelota5.setAncho( 15 );
+        pelota5.setX(ANCHO / 2 );
+        pelota5.setY(ALTO / 2 );
         resetPelotacentro(pelota5,funcion );
 
         ///Posicionamos las paletas y escudos
         paletaV1.setX( 0 );
-        jugadores.setEscudo1( 5 );
-        jugadores.setEscudo2( 5 );
-
         paletaV1.setY( ALTO / 2 - 50 );
         paletaV1.setTamano( 15, 94 );
         paletaV2.setX( ANCHO - paletaV1.getAncho() );
         paletaV2.setY( ALTO / 2 - 50 );
         paletaV2.setTamano( 15, 94 );
+        jugadores.setEscudo1( 5 );
+        jugadores.setEscudo2( 5 );
 
         ///FUNCION PORTADA
         play_sample(audio[0].muestra_de_audio, 200, 150, 1000, 0 );
-
         while( !funcion.getPortada() )
         {
             if( key[KEY_ENTER] )
@@ -978,14 +966,13 @@ public :
             blit( bits[8].mapa_de_bits, screen, 0, 0, 0, 0, ANCHO, ALTO );
         }
 
-        ///inicio del bucle del juego
+        ///inicio del juego
         ///Funcion para salir de la ventana (ESC = SALIR)
         while( ! funcion.getVentana() )
         {
             if( key[KEY_ESC] )
-                funcion.setVentana( true ); // sirve para cerrar la ventana
+            funcion.setVentana( true ); /// sirve para cerrar la ventana
             ///Color De los Bitmap De Fondo
-
             clear_to_color( bits[1].mapa_de_bits, 0x003800 );
             clear_to_color( bits[2].mapa_de_bits, 0x370000 );
             clear_to_color( bits[3].mapa_de_bits, 0x060739 );
@@ -1027,7 +1014,6 @@ public :
                     movSpeed = 6  + funcion.getContadorP();
                     break ;
                 case 5:
-
                     movSpeed = 7  + funcion.getContadorP();
                     break ;
                 }
@@ -1076,36 +1062,33 @@ public :
                         paletaV2.setY( ( paletaV2.getY() < 0 ) ?0 : posy2 );
                     }
                 }
-                //FUNCIONES VARIAS
-
+                ///FUNCIONES VARIAS
                 switch(funcion.getContadorP())
                 {
                 case 1 :
-                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
                     break ;
                 case 2:
-                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
                     break;
                 case 3:
-                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota3, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota3, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
                     break;
                 case 4:
-                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota3, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota4, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota3, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota4, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
                     break;
                 case 5:
-                    textprintf_ex( buffer, font, 400, 300, 0x00F0FBFF, - 1, "la velocidad es %d:", pelota1.getVel() );
-                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota3, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota4, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits,bits[11].mapa_de_bits,bits[12].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-
+                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota3, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota4, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
                     break;
                 }
                 ///TIEMPO - 1
@@ -1115,25 +1098,25 @@ public :
             switch(funcion.getContadorP())
             {
             case 1 :
-                dibujar_pelota( bits[0].mapa_de_bits, pelota1);
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota1);
                 break ;
             case 2 :
-                dibujar_pelota( bits[0].mapa_de_bits, pelota1);
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota1);
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota2,20, "negativo");
                 break;
             case 3:
-                dibujar_pelota( bits[0].mapa_de_bits, pelota1);
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota1);
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota2,20, "negativo");
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota3,20, "positivo");
                 break;
             case 4 :
-                dibujar_pelota( bits[0].mapa_de_bits, pelota1);
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota1);
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota2,20, "negativo");
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota3,20, "positivo");
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota4,40, "positivo");
                 break;
             case 5 :
-                dibujar_pelota( bits[0].mapa_de_bits, pelota1);
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota1);
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota2,20, "negativo");
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota3,20, "positivo");
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota4,40,"positivo");
@@ -1173,12 +1156,12 @@ public :
                 break ;
             }
         }
-        //TIEMPO INTERLOCUCION DE CPU (20)
+        ///TIEMPO INTERLOCUCION DE CPU (20)
         rest( 25 );
-        //LIMPIEZA DE BITMAPS
+        ///LIMPIEZA DE BITMAPS
         clear_bitmap( bits[0].mapa_de_bits );
 
-        //DESTRUCTORES DE BITMAPS
+        ///DESTRUCTORES DE BITMAPS
         destroy_bitmap( bits[0].mapa_de_bits );
         destroy_bitmap( bits[1].mapa_de_bits );
         destroy_bitmap( bits[2].mapa_de_bits );
@@ -1198,24 +1181,21 @@ public :
 
 void cerrar_portada()
 {
-    //Funcionalidad<int,bool> funcion;
     funcion.setPortada( true );
 }
 void cerrar_ventana()
 {
-    //Funcionalidad<int,bool> funcion;
     funcion.setVentana( true );
 }
 void incremento()
 {
-    //Funcionalidad<int,bool> funcion;
     funcion.setTiempo( funcion.getTiempo() + 1 );
 }
 
 int main()
 {
-    juego j ;
-    j.IniciarYJugar();
+    juego init ;
+    init.IniciarYJugar();
     allegro_exit( );
     return 0;
 }
