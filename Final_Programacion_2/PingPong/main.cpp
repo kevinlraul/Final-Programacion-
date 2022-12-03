@@ -70,10 +70,12 @@ public:
         return puntaje2;
     }
 };
-template <class type1,class type2>
+
+template <class type1,class type2>///type1 int && type2 bool
 class Funcionalidad
 {
     type1 resultado;
+    type1 cont;
     type1 nivel;
     type1 tiempo;
     type1 mensaje;
@@ -93,7 +95,8 @@ public:
         escore = 0 ;
         ganar1 = 0 ;
         ganar2 = 0 ;
-        contadorP = 1;
+        cont=0;
+        contadorP = 5;
         ventana = false;
         Portada = false;
         tiempo++;
@@ -152,6 +155,14 @@ public:
     void setMensaje ( type1 Mensaje )
     {
         this->mensaje = Mensaje;
+    }
+    void setCont(type1 cont)
+    {
+        this->cont ;
+    }
+    type1 getCont()
+    {
+        return cont ;
     }
     type1 getGanar1()
     {
@@ -265,6 +276,7 @@ class Pelota
     type1 Y;
     type1 alto;
     type1 ancho;
+    type1 identidad ;
     type1 dirX;
     type1 dirY;
     type2 velocidadX;
@@ -278,21 +290,7 @@ public:
         Y=0;
         dirX=0;
         dirY=0;
-    }
-    void direccion_Pelota(Pelota<int,float> &pelota, Funcionalidad<int,bool> &funciones)
-    {
-        int direccionX,direccionY;
-        ///SETTERS DE PELOTA
-        pelota.setX( ANCHO / 2 );
-        pelota.setY( ALTO / 2 );
-        srand( time( 0 ) );
-        direccionX = ( rand() % 2) + 1; ///DIRECCION X RAND 0/1
-        direccionY = ( rand() % 2) + 1; ///DIRECCION Y RAND 0/1
-        direccionX = ( direccionX == 1 ) ? - 1 : 1;///1 = -1 , 2 = 1
-        direccionY = ( direccionY == 1 ) ? - 1 : 1;///1 = -1 , 2 = 1
-        pelota.setDirX( direccionX );///SETTER
-        pelota.setDirY( direccionY );///SETTER
-        funciones.setResultado( 1 );///MARCA DE INICIO
+        identidad=0;
     }
     ~Pelota ()
     {
@@ -336,7 +334,14 @@ public:
     {
         this->dirY = dirY;
     }
-
+    void setIdentidad(type1 identidad)
+    {
+        this->identidad = identidad ;
+    }
+    type1 getIdentidad()
+    {
+        return identidad ;
+    }
     type1 getVel ()
     {
         return velocidad;
@@ -381,40 +386,90 @@ public:
     {
         return dirY;
     };
-
-    void resetPelotacentro( Pelota<int,float> &pelota, Funcionalidad<int,bool> &funciones )
+    void direccion_Pelota(Pelota<int,float> &pelota, Funcionalidad<int,bool> &funciones)
     {
         int direccionX,direccionY;
-        ///SETTERS DE PELOTA
-        pelota.setX( ANCHO / 2 );
-        pelota.setY( ALTO / 2 );
-
-        srand( time( NULL ) );
+        ///DIRECCION DE LA PELOTA
+        srand( time( 0 ) );
         direccionX = ( rand() % 2) + 1; ///DIRECCION X RAND 0/1
         direccionY = ( rand() % 2) + 1; ///DIRECCION Y RAND 0/1
         direccionX = ( direccionX == 1 ) ? - 1 : 1;///1 = -1 , 2 = 1
         direccionY = ( direccionY == 1 ) ? - 1 : 1;///1 = -1 , 2 = 1
-        pelota.setDirX( direccionX );///SETTER
-        pelota.setDirY( direccionY );///SETTER
+        pelota.setDirX( direccionX    );///SETTER
+        pelota.setDirY( direccionY   );///SETTER
         funciones.setResultado( 1 );///MARCA DE INICIO
     }
-    void resetPelota( Pelota<int,float> &pelota, Paleta<int> paleta, int a, Jugador<int> &jugadores, Funcionalidad<int,bool> &funciones, BITMAP *buffer, BITMAP *jugador1, BITMAP *jugador2, SAMPLE *level_up, SAMPLE *winner)
+    void resetPelotaPaleta( Pelota<int,float> &pelota,Pelota<int,float> &pelota1,Pelota<int,float> &pelota2,Pelota<int,float> &pelota3,Pelota<int,float> &pelota4,Pelota<int,float> &pelota5, Paleta<int> paleta, int a, Jugador<int> &jugadores, Funcionalidad<int,bool> &funciones, BITMAP *buffer, BITMAP *jugador1, BITMAP *jugador2, SAMPLE *level_up, SAMPLE *winner)
     {
         if ( a == 1 )
         {
             ///GANA PALETA2     //PELOTA SETTEADA EN PALETA1
-            pelota.setX( paleta.getX() + paleta.getAncho() + pelota.getAncho() - 3 );
-            pelota.setY( paleta.getY() + paleta.getAlto() / 2 );
-            pelota.setDirX( 1 );
+            if(pelota.getIdentidad() == pelota1.getIdentidad() )
+            {
+                pelota1.setX( paleta.getX() + paleta.getAncho() + pelota.getAncho() - 3);
+                pelota1.setY( paleta.getY() + paleta.getAlto() / 2);
+                pelota1.setDirX( 1 );
+            }
+            if(pelota.getIdentidad() == pelota2.getIdentidad())
+            {
+                pelota2.setY( (paleta.getY() + paleta.getAlto() / 2)- 20);
+                pelota2.setX( paleta.getX() + paleta.getAncho() + pelota.getAncho() - 3);
+                pelota2.setDirX( 1 );
+            }
+            if(pelota.getIdentidad() == pelota3.getIdentidad())
+            {
+                pelota3.setX( paleta.getX() + paleta.getAncho() + pelota.getAncho() - 3);
+                pelota3.setY( (paleta.getY() + paleta.getAlto() / 2)+ 20);
+                pelota3.setDirX( 1 );
+            }
+            if(pelota.getIdentidad() == pelota4.getIdentidad())
+            {
+                pelota4.setX( paleta.getX() + paleta.getAncho() + pelota.getAncho() - 3);
+                pelota4.setY( (paleta.getY() + paleta.getAlto() / 2)+ 40);
+                pelota4.setDirX( 1 );
+            }
+            if(pelota.getIdentidad() == pelota5.getIdentidad())
+            {
+                pelota5.setX( paleta.getX() + paleta.getAncho() + pelota.getAncho() - 3);
+                pelota5.setY( (paleta.getY() + paleta.getAlto() / 2)- 40);
+                pelota5.setDirX( 1 );
+            }
             jugadores.setPuntaje2( jugadores.getPuntaje2() + 1 );
             funciones.setEscore(funciones.getEscore()+10) ;
         }
         else
         {
             ///GANA PALETA1   //PELOTA SETTEADA EN PALETA2
-            pelota.setX( paleta.getX() - paleta.getAncho() / 2 - pelota.getAncho() + 7 );
-            pelota.setY( paleta.getY() + paleta.getAlto() / 2 );
-            pelota.setDirX( -1 );
+            if(pelota.getIdentidad() == pelota1.getIdentidad() )
+            {
+                pelota1.setX( paleta.getX() - paleta.getAncho() / 2 - pelota.getAncho() + 7 );
+                pelota1.setY( paleta.getY() + paleta.getAlto() / 2);
+                pelota1.setDirX( -1 );
+            }
+            if(pelota.getIdentidad() == pelota2.getIdentidad() )
+            {
+                pelota2.setX( paleta.getX() - paleta.getAncho() / 2 - pelota.getAncho() + 7 );
+                pelota2.setY( (paleta.getY() + paleta.getAlto() / 2)- 20);
+                pelota2.setDirX( -1 );
+            }
+            if(pelota.getIdentidad() == pelota3.getIdentidad() )
+            {
+                pelota3.setX( paleta.getX() - paleta.getAncho() / 2 - pelota.getAncho() + 7 );
+                pelota3.setY( (paleta.getY() + paleta.getAlto() / 2)+ 20);
+                pelota3.setDirX( -1 );
+            }
+            if(pelota.getIdentidad() == pelota4.getIdentidad() )
+            {
+                pelota4.setX( paleta.getX() - paleta.getAncho() / 2 - pelota.getAncho() + 7 );
+                pelota4.setY( (paleta.getY() + paleta.getAlto() / 2)+ 40);
+                pelota4.setDirX( -1 );
+            }
+            if(pelota.getIdentidad() == pelota5.getIdentidad() )
+            {
+                pelota5.setX( paleta.getX() - paleta.getAncho() / 2 - pelota.getAncho() + 7 );
+                pelota5.setY( (paleta.getY() + paleta.getAlto() / 2)- 40);
+                pelota5.setDirX( -1 );
+            }
             jugadores.setPuntaje1( jugadores.getPuntaje1() + 1 );
             funciones.setEscore(funciones.getEscore()+10) ;
         }
@@ -432,8 +487,6 @@ public:
             funciones.setNivel(2);
             jugadores.setPuntaje1(0);
             jugadores.setPuntaje2(0);
-            pelota.direccion_Pelota(pelota,funciones);
-
         }
         else if((jugadores.getPuntaje1()== 5  || jugadores.getPuntaje2()==5) && funciones.getNivel()== 2 )
         {
@@ -442,7 +495,6 @@ public:
             funciones.setNivel(3);
             jugadores.setPuntaje1(0);
             jugadores.setPuntaje2(0);
-            pelota.direccion_Pelota(pelota,funciones);
         }
         else if((jugadores.getPuntaje1()== 5  || jugadores.getPuntaje2()==5) && funciones.getNivel()== 3)
         {
@@ -452,7 +504,6 @@ public:
             funciones.setNivel(4);
             jugadores.setPuntaje1(0);
             jugadores.setPuntaje2(0);
-            pelota.direccion_Pelota(pelota,funciones);
         }
         else if((jugadores.getPuntaje1()== 5  || jugadores.getPuntaje2()==5)&& funciones.getNivel()== 4 )
         {
@@ -461,9 +512,8 @@ public:
             funciones.setNivel(5);
             jugadores.setPuntaje1(0);
             jugadores.setPuntaje2(0);
-            pelota.direccion_Pelota(pelota,funciones);
         }
-        if( funciones.getGanar1() >= 2   || funciones.getNivel()==5 )//Gana El Jugador 1
+        if( funciones.getGanar1() >= 3   )///Gana El Jugador 1
         {
             play_sample( winner, 200, 150, 1000, 0 );
             funciones.setContadorP(funciones.getContadorP() +1 );
@@ -479,17 +529,15 @@ public:
                 funciones.setNivel(1);
                 funciones.setGanar1(0);
                 funciones.setGanar2(0);
-                pelota.setVel(5);
-                pelota.direccion_Pelota(pelota,funciones);
-                resetPelotacentro(pelota,funciones);
-            }
-            if( key[KEY_ESC] )
-            {
-                /// Sales del Juego
-                allegro_exit();
+                funciones.setEscore(0);
+                if( key[KEY_ESC] )
+                {
+                    /// Sales del Juego
+                    allegro_exit();
+                }
             }
         }
-        else if( funciones.getGanar2() >= 2   || funciones.getNivel()==5 )
+        else if( funciones.getGanar2() >= 3   )
         {
             ///Gana el Jugador 2
             play_sample( winner, 200, 150, 1000, 0 );
@@ -506,14 +554,12 @@ public:
                 funciones.setGanar2(0);
                 funciones.setNivel(1);
                 funciones.setNuevo( true );
-                pelota.setVel(5);
-                pelota.direccion_Pelota(pelota,funciones);
-                resetPelotacentro(pelota,funciones);
-            }
-            if( key[KEY_ESC] )
-            {
-                /// Salir Del Juego
-                allegro_exit();
+                funciones.setEscore(0);
+                if( key[KEY_ESC] )
+                {
+                    /// Salir Del Juego
+                    allegro_exit();
+                }
             }
         }
         if( funciones.getNuevo() == true )
@@ -531,7 +577,7 @@ public:
         pelota.setVelY( pelota.getVel() );
         funciones.setResultado( 1 );
     }
-    void moverPelota( Pelota<int,float> &pelota, Paleta<int> &paleta1, Paleta<int> &paleta2, Jugador<int> &jugadores,Funcionalidad<int,bool> &funciones, BITMAP *buffer, BITMAP *jugador1, BITMAP *jugador2,SAMPLE *hit,SAMPLE *punto,SAMPLE *level_up, SAMPLE *winner, SAMPLE *wall,SAMPLE *escudo)
+    void moverPelota( Pelota<int,float> &pelota,Pelota<int,float> &pelota1,Pelota<int,float> &pelota2,Pelota<int,float> &pelota3,Pelota<int,float> &pelota4,Pelota<int,float> &pelota5, Paleta<int> &paleta1, Paleta<int> &paleta2, Jugador<int> &jugadores,Funcionalidad<int,bool> &funciones, BITMAP *buffer, BITMAP *jugador1, BITMAP *jugador2,SAMPLE *hit,SAMPLE *punto,SAMPLE *level_up, SAMPLE *winner, SAMPLE *wall,SAMPLE *escudo)
     {
         if(funciones.getNivel() == 1)
         {
@@ -596,8 +642,7 @@ public:
                 }
                 dirx *= -1;
             }
-            else
-                ///PALETA1 PIERDE
+            else///PALETA1 PIERDE
             {
                 if( ( py > y1 + paleta1.getAlto() ) && ( px > paleta1.getAncho() + pelota.getAncho() / 2 ) && ( diry == -1 ) && ( px > 0 ) )
                     ///PALETA1 REBOTE
@@ -626,7 +671,7 @@ public:
                     funciones.setMensaje( 1 );
                     play_sample( punto, 200, 150, 1000, 0 );
                     jugadores.setEscudo2(jugadores.getEscudo2() +  1 );
-                    resetPelota(pelota, paleta1, 1, jugadores, funciones, buffer, jugador1, jugador2, level_up, winner);
+                    resetPelotaPaleta(pelota,pelota1,pelota2,pelota3,pelota4,pelota5, paleta1, 1, jugadores, funciones, buffer, jugador1, jugador2, level_up, winner);
                     return;
                 }
             }
@@ -701,7 +746,7 @@ public:
                     funciones.setMensaje( 1 );
                     play_sample( punto, 200, 150, 1000, 0 );
                     jugadores.setEscudo1(jugadores.getEscudo1() +  1 );
-                    resetPelota( pelota, paleta2, 2, jugadores, funciones, buffer, jugador1, jugador2, level_up, winner);
+                    resetPelotaPaleta( pelota,pelota1,pelota2,pelota3,pelota4,pelota5, paleta2, 2, jugadores, funciones, buffer, jugador1, jugador2, level_up, winner);
                     return;
                 }
             }
@@ -799,35 +844,22 @@ public:
         circlefill ( Buffer, pelota.getX(), pelota.getY(), pelota.getAncho() / 2, 0xFFFFFF );
         circlefill ( Buffer, pelota.getX(), pelota.getY(), pelota.getAncho() / 6, 0x000000 );    /// me da el color negro
     }
-    void Dibujar_pelota(BITMAP *Buffer, Pelota<int,float> &pelota,int numero,string signo )///DIBUJAR PELOTA
-    {
-        if (signo == "negativo" )
-        {
-            circlefill ( Buffer, pelota.getX(),pelota.getY() - numero, pelota.getAncho() / 2, 0xFFFFFF );
-            circlefill ( Buffer, pelota.getX(), pelota.getY() - numero, pelota.getAncho() / 6, 0x000000 );
-        }
-        else if (signo == "positivo")
-        {
-            circlefill ( Buffer, pelota.getX(), pelota.getY() + numero, pelota.getAncho()/ 2, 0xFFFFFF );
-            circlefill ( Buffer, pelota.getX(), pelota.getY() + numero, pelota.getAncho() / 6, 0x000000 );
-        }
-    }
 };
 ///INVOCACION DE LA FUNCIONALIDAD
 Funcionalidad<int,bool> funcion;
 class juego: public Dibujar, public Pelota <int,float>,public Funcionalidad<int,bool>, public Jugador<int>, public Paleta<int>
 {
 ///INVOCACION DE CLASES
-Paleta<int> paletaV1;
-Paleta<int> paletaV2;
-Pelota<int,float> pelota1;
-Pelota<int,float> pelota2 ;
-Pelota<int,float> pelota3 ;
-Pelota<int,float> pelota4 ;
-Pelota<int,float> pelota5 ;
-Jugador<int> jugadores;
-bitmaps *bits;
-samples *audio;
+    Paleta<int> paletaV1;
+    Paleta<int> paletaV2;
+    Pelota<int,float> pelota1;
+    Pelota<int,float> pelota2 ;
+    Pelota<int,float> pelota3 ;
+    Pelota<int,float> pelota4 ;
+    Pelota<int,float> pelota5 ;
+    Jugador<int> jugadores;
+    bitmaps *bits;
+    samples *audio;
 public :
     void IniciarYJugar( )
     {
@@ -903,43 +935,48 @@ public :
         pelota1.setAncho( 15 );
         pelota1.setX(ANCHO / 2 );
         pelota1.setY(ALTO / 2 );
-        resetPelotacentro(pelota1,funcion );
+        pelota1.setIdentidad(1);
+        direccion_Pelota(pelota1,funcion );
 
         pelota2.setVelX( 5);
-        pelota2.setVelY( 4);
-        pelota2.setVel( 5 );
+        pelota2.setVelY( 5);
+        pelota2.setVel( 4 );
         pelota2.setAlto( 15 );
         pelota2.setAncho( 15 );
         pelota2.setX(ANCHO / 2 );
-        pelota2.setY(ALTO / 2 );
-        resetPelotacentro(pelota2,funcion );
+        pelota2.setY((ALTO / 2) - 20  );
+        pelota2.setIdentidad(2);
+        direccion_Pelota(pelota2,funcion );
 
-        pelota3.setVelX( 5 );
-        pelota3.setVelY( 3);
+        pelota3.setVelX( 4 );
+        pelota3.setVelY( 5);
         pelota3.setVel( 5 );
         pelota3.setAlto( 15 );
         pelota3.setAncho( 15 );
         pelota3.setX(ANCHO / 2 );
-        pelota3.setY(ALTO / 2 );
-        resetPelotacentro(pelota3,funcion );
+        pelota3.setY((ALTO / 2) + 20  );
+        pelota3.setIdentidad(3);
+        direccion_Pelota(pelota3,funcion );
 
         pelota4.setVelX( 5 );
-        pelota4.setVelY(2 );
-        pelota4.setVel( 5 );
+        pelota4.setVelY(4 );
+        pelota4.setVel( 4 );
         pelota4.setAlto( 15 );
         pelota4.setAncho( 15 );
         pelota4.setX(ANCHO / 2 );
-        pelota4.setY(ALTO / 2 );
-        resetPelotacentro(pelota4,funcion );
+        pelota4.setY((ALTO / 2) + 40  );
+        pelota4.setIdentidad(4);
+        direccion_Pelota(pelota4,funcion );
 
-        pelota5.setVelX( 5 );
-        pelota5.setVelY( 1);
+        pelota5.setVelX( 4 );
+        pelota5.setVelY( 4);
         pelota5.setVel( 5 );
         pelota5.setAlto( 15 );
         pelota5.setAncho( 15 );
         pelota5.setX(ANCHO / 2 );
-        pelota5.setY(ALTO / 2 );
-        resetPelotacentro(pelota5,funcion );
+        pelota5.setY((ALTO / 2) - 40  );
+        pelota5.setIdentidad(5);
+        direccion_Pelota(pelota5,funcion );
 
         ///Posicionamos las paletas y escudos
         paletaV1.setX( 0 );
@@ -971,7 +1008,7 @@ public :
         while( ! funcion.getVentana() )
         {
             if( key[KEY_ESC] )
-            funcion.setVentana( true ); /// sirve para cerrar la ventana
+                funcion.setVentana( true ); /// sirve para cerrar la ventana
             ///Color De los Bitmap De Fondo
             clear_to_color( bits[1].mapa_de_bits, 0x003800 );
             clear_to_color( bits[2].mapa_de_bits, 0x370000 );
@@ -1026,7 +1063,7 @@ public :
                     }
                     else
                     {
-                        paletaV1.setY( ( paletaV1.getY() < 0 ) ?0 : posy1 );
+                        paletaV1.setY( ( paletaV1.getY() < 0 ) ?0 : posy1 );/// if ternario // lo anoto por que se me olvida el nombre :D
                     }
                 }
                 else if( key[KEY_S]  )
@@ -1066,29 +1103,29 @@ public :
                 switch(funcion.getContadorP())
                 {
                 case 1 :
-                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota(pelota1, pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
                     break ;
                 case 2:
-                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota1, pelota1,pelota2,pelota3,pelota4,pelota5,paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota2, pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
                     break;
                 case 3:
-                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota3, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota1, pelota1,pelota2,pelota3,pelota4,pelota5,paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota2,pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota3, pelota1,pelota2,pelota3,pelota4,pelota5,paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
                     break;
                 case 4:
-                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota3, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota4, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota1,pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota2,pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota3,pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota4,pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
                     break;
                 case 5:
-                    moverPelota( pelota1, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota2, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota3, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota4, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
-                    moverPelota( pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota1,pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota2,pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota3,pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota4,pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
+                    moverPelota( pelota5,pelota1,pelota2,pelota3,pelota4,pelota5, paletaV1, paletaV2, jugadores, funcion, bits[0].mapa_de_bits, bits[9].mapa_de_bits, bits[10].mapa_de_bits, audio[1].muestra_de_audio,audio[2].muestra_de_audio,audio[4].muestra_de_audio, audio[5].muestra_de_audio, audio[6].muestra_de_audio,audio[7].muestra_de_audio );
                     break;
                 }
                 ///TIEMPO - 1
@@ -1102,25 +1139,25 @@ public :
                 break ;
             case 2 :
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota1);
-                Dibujar_pelota( bits[0].mapa_de_bits, pelota2,20, "negativo");
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota2);
                 break;
             case 3:
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota1);
-                Dibujar_pelota( bits[0].mapa_de_bits, pelota2,20, "negativo");
-                Dibujar_pelota( bits[0].mapa_de_bits, pelota3,20, "positivo");
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota2);
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota3);
                 break;
             case 4 :
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota1);
-                Dibujar_pelota( bits[0].mapa_de_bits, pelota2,20, "negativo");
-                Dibujar_pelota( bits[0].mapa_de_bits, pelota3,20, "positivo");
-                Dibujar_pelota( bits[0].mapa_de_bits, pelota4,40, "positivo");
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota2);
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota3);
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota4);
                 break;
             case 5 :
                 Dibujar_pelota( bits[0].mapa_de_bits, pelota1);
-                Dibujar_pelota( bits[0].mapa_de_bits, pelota2,20, "negativo");
-                Dibujar_pelota( bits[0].mapa_de_bits, pelota3,20, "positivo");
-                Dibujar_pelota( bits[0].mapa_de_bits, pelota4,40,"positivo");
-                Dibujar_pelota( bits[0].mapa_de_bits, pelota5,40,"negativo");
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota2);
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota3);
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota4);
+                Dibujar_pelota( bits[0].mapa_de_bits, pelota5);
                 break ;
             }
             ///FUNCIONES Y SETTERS DE PALETAS, PELOTAS, MESA
